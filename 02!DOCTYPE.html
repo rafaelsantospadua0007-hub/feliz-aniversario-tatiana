@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Feliz Aniversário Tatiana 🎉</title>
+
+<style>
+body {
+    margin: 0;
+    overflow: hidden;
+    background: black;
+    font-family: 'Georgia', serif;
+    text-align: center;
+    color: white;
+}
+
+/* Tela inicial */
+#telaInicial {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1a1a1a, #3b003b);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 2;
+}
+
+button {
+    padding: 15px 30px;
+    font-size: 20px;
+    border: none;
+    background: gold;
+    color: black;
+    cursor: pointer;
+    border-radius: 30px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: white;
+}
+
+/* Mensagem principal */
+#conteudo {
+    display: none;
+    position: relative;
+    z-index: 1;
+    margin-top: 15%;
+}
+
+h1 {
+    font-size: 60px;
+    color: gold;
+    animation: fadeIn 3s ease-in-out;
+}
+
+p {
+    font-size: 28px;
+    animation: fadeIn 5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Canvas dos fogos */
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+</style>
+</head>
+<body>
+
+<div id="telaInicial">
+    <h2>Uma surpresa especial para Tatiana 💖</h2>
+    <button onclick="iniciar()">Abrir</button>
+</div>
+
+<div id="conteudo">
+    <h1>🎂 Feliz Aniversário, Tatiana! 🎉</h1>
+    <p>Que sua vida seja iluminada como esses fogos,<br>
+    cheia de elegância, amor e sucesso! ✨</p>
+</div>
+
+<audio id="musica" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
+<canvas id="fogos"></canvas>
+
+<script>
+function iniciar() {
+    document.getElementById("telaInicial").style.display = "none";
+    document.getElementById("conteudo").style.display = "block";
+    document.getElementById("musica").play();
+}
+
+/* Fogos animados */
+const canvas = document.getElementById("fogos");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+
+function Firework() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height / 2;
+    this.size = 3;
+    this.color = "hsl(" + Math.random() * 360 + ", 100%, 50%)";
+}
+
+function createFirework() {
+    for(let i = 0; i < 100; i++) {
+        particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height / 2,
+            radius: Math.random() * 3,
+            color: "hsl(" + Math.random() * 360 + ", 100%, 50%)",
+            speedX: (Math.random() - 0.5) * 5,
+            speedY: (Math.random() - 0.5) * 5
+        });
+    }
+}
+
+function animate() {
+    ctx.fillStyle = "rgba(0,0,0,0.2)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    particles.forEach((p, index) => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+        p.x += p.speedX;
+        p.y += p.speedY;
+        p.radius *= 0.96;
+
+        if(p.radius < 0.5) particles.splice(index, 1);
+    });
+
+    requestAnimationFrame(animate);
+}
+
+setInterval(createFirework, 1000);
+animate();
+</script>
+
+</body>
+</html>
